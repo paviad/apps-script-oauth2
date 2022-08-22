@@ -1,4 +1,5 @@
 import { Service } from './Service';
+import { STORAGE_PREFIX_ } from './Consts';
 
 // Copyright 2014 Google Inc. All Rights Reserved.
 //
@@ -24,7 +25,7 @@ import { Service } from './Service';
  * create and configure your service once at the start of your script, and then
  * reference them during the different phases of the authorization flow.
  * @param {string} serviceName The name of the service.
- * @return {Service_} The service object.
+ * @return {Service} The service object.
  */
 export function createService(serviceName) {
   return new Service(serviceName);
@@ -40,12 +41,12 @@ export function createService(serviceName) {
  */
 export function getServiceNames(propertyStore) {
   var props = propertyStore.getProperties();
-  return Object.keys(props).filter(function(key) {
+  return Object.keys(props).filter(key => {
     var parts = key.split('.');
     return key.indexOf(STORAGE_PREFIX_) == 0 && parts.length > 1 && parts[1];
-  }).map(function(key) {
+  }).map(key => {
     return key.split('.')[1];
-  }).reduce(function(result, key) {
+  }).reduce((result, key) => {
     if (result.indexOf(key) < 0) {
       result.push(key);
     }
