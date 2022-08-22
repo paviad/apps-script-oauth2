@@ -1,3 +1,5 @@
+import { Service } from './Service';
+
 // Copyright 2014 Google Inc. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,41 +20,14 @@
  */
 
 /**
- * The supported formats for the returned OAuth2 token.
- * @enum {string}
- */
-var TOKEN_FORMAT = {
-  /** JSON format, for example <code>{"access_token": "..."}</code> **/
-  JSON: 'application/json',
-  /** Form URL-encoded, for example <code>access_token=...</code> **/
-  FORM_URL_ENCODED: 'application/x-www-form-urlencoded'
-};
-
-var STORAGE_PREFIX_ = 'oauth2.';
-
-/**
  * Creates a new OAuth2 service with the name specified. It's usually best to
  * create and configure your service once at the start of your script, and then
  * reference them during the different phases of the authorization flow.
  * @param {string} serviceName The name of the service.
  * @return {Service_} The service object.
  */
-function createService(serviceName) {
-  return new Service_(serviceName);
-}
-
-/**
- * Returns the redirect URI that will be used for a given script. Often this URI
- * needs to be entered into a configuration screen of your OAuth provider.
- * @param {string=} optScriptId The script ID of your script, which can be
- *     found in the Script Editor UI under "File > Project properties". Defaults
- *     to the script ID of the script being executed.
- * @return {string} The redirect URI.
- */
-function getRedirectUri(optScriptId) {
-  var scriptId = optScriptId || ScriptApp.getScriptId();
-  return 'https://script.google.com/macros/d/' + encodeURIComponent(scriptId) +
-    '/usercallback';
+export function createService(serviceName) {
+  return new Service(serviceName);
 }
 
 /**
@@ -63,26 +38,17 @@ function getRedirectUri(optScriptId) {
  * @param {PropertiesService.Properties} propertyStore The properties to check.
  * @return {Array.<string>} The service names.
  */
-function getServiceNames(propertyStore) {
+export function getServiceNames(propertyStore) {
   var props = propertyStore.getProperties();
-  return Object.keys(props).filter(function (key) {
+  return Object.keys(props).filter(function(key) {
     var parts = key.split('.');
     return key.indexOf(STORAGE_PREFIX_) == 0 && parts.length > 1 && parts[1];
-  }).map(function (key) {
+  }).map(function(key) {
     return key.split('.')[1];
-  }).reduce(function (result, key) {
+  }).reduce(function(result, key) {
     if (result.indexOf(key) < 0) {
       result.push(key);
     }
     return result;
   }, []);
-}
-
-if (typeof module === 'object') {
-  module.exports = {
-    createService: createService,
-    getRedirectUri: getRedirectUri,
-    getServiceNames: getServiceNames,
-    TOKEN_FORMAT: TOKEN_FORMAT
-  };
 }

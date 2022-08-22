@@ -24,8 +24,8 @@
  * @return {string} The complete URL.
  * @private
  */
-function buildUrl_(url, params) {
-  var paramString = Object.keys(params).map(function(key) {
+export function buildUrl_(url, params) {
+  var paramString = Object.keys(params).map(key => {
     return encodeURIComponent(key) + '=' + encodeURIComponent(params[key]);
   }).join('&');
   return url + (url.indexOf('?') >= 0 ? '&' : '?') + paramString;
@@ -38,8 +38,8 @@ function buildUrl_(url, params) {
  * @param {Object.<string, string>} params The values to validate.
  * @private
  */
-function validate_(params) {
-  Object.keys(params).forEach(function(name) {
+export function validate_(params) {
+  Object.keys(params).forEach(name => {
     var value = params[name];
     if (!value) {
       throw new Error(name + ' is required.');
@@ -54,7 +54,7 @@ function validate_(params) {
  * @return {number} The number of seconds since the epoch.
  * @private
  */
-function getTimeInSeconds_(date) {
+export function getTimeInSeconds_(date) {
   return Math.floor(date.getTime() / 1000);
 }
 
@@ -69,7 +69,7 @@ function getTimeInSeconds_(date) {
  *     properties.
  * @see http://underscorejs.org/#extend
  */
-function extend_(destination, source) {
+export function extend_(destination, source) {
   var keys = Object.keys(source);
   for (var i = 0; i < keys.length; ++i) {
     destination[keys[i]] = source[keys[i]];
@@ -84,13 +84,13 @@ function extend_(destination, source) {
  * @param {Object} obj The object to copy.
  * @return {Object} A shallow copy of the object with all lower-case keys.
  */
-function toLowerCaseKeys_(obj) {
+export function toLowerCaseKeys_(obj) {
   if (obj === null || typeof obj !== 'object') {
     return obj;
   }
   // For each key in the source object, add a lower-case version to a new
   // object, and return it.
-  return Object.keys(obj).reduce(function(result, k) {
+  return Object.keys(obj).reduce((result, k) => {
     result[k.toLowerCase()] = obj[k];
     return result;
   }, {});
@@ -104,15 +104,15 @@ function toLowerCaseKeys_(obj) {
  * @param {string} key The key to use when generating the signature.
  * @return {string} The encoded and signed JWT.
  */
-function encodeJwt_(payload, key) {
+export function encodeJwt_(payload, key) {
   var header = {
     alg: 'RS256',
     typ: 'JWT'
   };
   var toSign = Utilities.base64EncodeWebSafe(JSON.stringify(header)) + '.' +
-      Utilities.base64EncodeWebSafe(JSON.stringify(payload));
+    Utilities.base64EncodeWebSafe(JSON.stringify(payload));
   var signatureBytes =
-      Utilities.computeRsaSha256Signature(toSign, key);
+    Utilities.computeRsaSha256Signature(toSign, key);
   var signature = Utilities.base64EncodeWebSafe(signatureBytes);
   return toSign + '.' + signature;
 }
@@ -124,7 +124,7 @@ function encodeJwt_(payload, key) {
  * @param {string} jwt The JWT to decode.
  * @return {Object} The decoded payload.
  */
-function decodeJwt_(jwt) {
+export function decodeJwt_(jwt) {
   var payload = jwt.split('.')[1];
   var blob = Utilities.newBlob(Utilities.base64DecodeWebSafe(payload));
   return JSON.parse(blob.getDataAsString());
@@ -136,7 +136,7 @@ function decodeJwt_(jwt) {
  * @param {string} value
  * @return {string} Web safe base64 encoded with padding removed.
  */
-function encodeUrlSafeBase64NoPadding_(value) {
+export function encodeUrlSafeBase64NoPadding_(value) {
   let encodedValue = Utilities.base64EncodeWebSafe(value);
   encodedValue = encodedValue.slice(0, encodedValue.indexOf('='));
   return encodedValue;
@@ -150,7 +150,7 @@ function encodeUrlSafeBase64NoPadding_(value) {
  * @param {string} codeVerifier String to encode
  * @return {string} BASE64(SHA256(ASCII(codeVerifier)))
  */
-function encodeChallenge_(method, codeVerifier) {
+export function encodeChallenge_(method, codeVerifier) {
   method = method.toLowerCase();
 
   if (method === 'plain') {
@@ -159,9 +159,9 @@ function encodeChallenge_(method, codeVerifier) {
 
   if (method === 's256') {
     const hashedValue = Utilities.computeDigest(
-        Utilities.DigestAlgorithm.SHA_256,
-        codeVerifier,
-        Utilities.Charset.US_ASCII);
+      Utilities.DigestAlgorithm.SHA_256,
+      codeVerifier,
+      Utilities.Charset.US_ASCII);
     return encodeUrlSafeBase64NoPadding_(hashedValue);
   }
 

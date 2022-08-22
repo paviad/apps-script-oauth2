@@ -18,6 +18,7 @@ module.exports = {
   "extends": "google",
   "parserOptions": {
     "ecmaVersion": 6,
+    "sourceType": "module",
   },
   "globals": {
     "HtmlService": false,
@@ -26,6 +27,12 @@ module.exports = {
     "UrlFetchApp": false,
   },
   "rules": {
+    "arrow-parens": "off",
+    "quotes": "off",
+    "max-len": "off",
+    "indent": ["error", 2],
+    "linebreak-style": "off",
+    "object-curly-spacing": "off",
     "comma-dangle": "off",
     "no-var": "off",
     "generator-star-spacing": ["error", {"anonymous": "neither"}],

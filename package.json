@@ -9,6 +9,8 @@
   "author": "Eric Koleda <ekoleda+devrel@googlers.com>",
   "license": "Apache-2.0",
   "private": true,
+  "main": "src/main.js",
+  "types": "src/index.d.ts",
   "bugs": {
     "url": "https://github.com/googlesamples/apps-script-oauth2/issues"
   },
